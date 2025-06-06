@@ -1,4 +1,8 @@
-#include<bits/stdc++.h>
+#include<iostream>
+#include<string>
+#include<unordered_map>
+#include<stack>
+#include<algorithm>
 using namespace std;
 
 //Palindrome check
