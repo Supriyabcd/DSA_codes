@@ -77,3 +77,40 @@ int nthRoot(int n, int m){
     }
     return -1;
 }
+
+
+//kth element in 2 sorted arrays when merged
+//brute force = use 3rd array to merge and traverse and find the kth ele
+
+//better approach - merge sort and two pointers related 
+int kthEle(vector<int>& a, vector<int>& b, int k){
+    int m = a.size();
+    int n = b.size();
+    int i = 0, j = 0;
+    int cnt = 0, ele = -1;
+
+    while(i < m && j < n){
+        if(a[i] > b[j]){
+            if(cnt == k-1) ele = b[j];
+            cnt++;
+            j++;
+        } else {
+            if(cnt == k-1) ele = a[i];
+            cnt++;
+            i++;
+        }
+    }
+
+    while(i < m){
+        if (cnt == k - 1) ele = a[i];
+        cnt++;
+        i++;
+    }
+
+    while(j < n){
+        if (cnt == k - 1) ele = b[j];
+        cnt++;
+        j++;
+    }
+    return ele;
+}

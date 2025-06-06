@@ -19,7 +19,7 @@ int findLargestElement(int arr[], int n) {
   return max;
 }
 
-//find second largest w/o sorting
+//find second largest/smallest w/o sorting
 //not optimal solution - O(N)
 void getElements(int arr[],int n)
 {
