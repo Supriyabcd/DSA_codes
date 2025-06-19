@@ -2,6 +2,7 @@
 #include<vector>
 #include<algorithm>
 #include <map>
+#include<unordered_set>
 #include <unordered_map>
 
 using namespace std;
@@ -290,6 +291,21 @@ vector<int> arr_leaders(int arr[], int n){
     return leaders;
 }
 
+//stock buy and sell
+/*given an array prices where prices[i] is the price of a given stock on the ith day.
+maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.
+Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0*/
+int maxProfit(vector<int>& prices) {
+        int mini = prices[0];
+        int profit = 0;
+        for(int i = 1; i < prices.size(); i++){
+            mini = min(prices[i],mini);
+            int cost = prices[i] - mini;
+            profit = max(profit, cost);
+        } 
+        return profit;
+}
+
 //merge two sorted arrays
 vector<int> merge(vector<int>& nums1, int m, vector<int>&nums2, int n){
     vector<int> result;
@@ -513,4 +529,145 @@ void setZeroes(vector<vector<int>>& matrix){
             matrix[i][0] = 0;
         }
     }
+}
+
+//print array in spiral manner 
+vector<int> spiralOrder(vector<vector<int>>& matrix) {
+        int m = matrix.size();
+        int n = matrix[0].size();
+        vector<int> ans;
+        
+        int  top = 0, bottom = m-1;
+        int  left = 0, right = n-1;
+
+        while(top <= bottom && left <= right){
+            
+            for(int j = left; j <= right; j++){
+                ans.push_back(matrix[top][j]);
+            }
+            top++;
+
+            for(int j = top; j <= bottom; j++){
+                ans.push_back(matrix[j][right]);
+            }
+            right--;
+
+            if(top <= bottom){
+                for(int j = right; j >= left; j--){
+                    ans.push_back(matrix[bottom][j]);
+                }
+                bottom--;
+            }
+
+            if(left <= right){
+                for(int j = bottom; j >= top; j--){
+                    ans.push_back(matrix[j][left]);
+                }
+                left++;
+            }
+        } 
+        return ans;
+}
+
+//rotate matrix by 90 degrees
+void rotate(vector<vector<int>>& matrix) {
+    int n = matrix.size();
+
+    for(int i = 0; i < n; i++){
+        for(int j = 0; j < i; j++){
+            swap(matrix[j][i], matrix[i][j]);
+        }
+    }
+    for (int i = 0; i < n; i++) {
+        reverse(matrix[i].begin(), matrix[i].end());
+    }
+}
+
+//Rearrange the array in alternating positive and negative items(modification need not be in same place)
+//brute force = use two arrays - one to store positives in same order as given array, another to store negatives
+//optimal = use two pointers for next postive ele and next -ve ele
+vector<int> rearrangeArray(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> ans(n , 0);
+        int i = 0, j = 1;
+        for(int k = 0; k < n; k++){
+            if(nums[k] > 0){
+                ans[i] = nums[k];
+                i += 2;
+            } else{
+                ans[j] = nums[k];
+                j += 2;
+            }
+        }
+        return ans;
+}
+
+
+//longest consecutive sequence
+//array - not sorted, mayhave duplicates
+//brute force: linear traversal for each element to find its x+1, x+2 and record longest length
+//better approach : sort and do the same thing
+
+//optimal: using set
+int longestConsecutive(vector<int>& nums) {
+        int len = 0, maxlen = 1;
+        unordered_set<int> set;
+        int n = nums.size();
+        if(n == 0) return 0;
+        for(int i = 0; i < n; i++){
+            set.insert(nums[i]);
+        }
+
+        for(int num : set){
+            if(set.find(num - 1) == set.end())
+            {
+                len = 1;
+                int x = num;
+                while(set.find(x + 1) != set.end()){
+                    x = x + 1;
+                    len = len + 1;
+                }
+                maxlen = max(maxlen, len);
+            }    
+        }
+        return maxlen;
+}
+
+//most freq ele afte atmost k operations
+//brute: nested loops for trying for each element
+int maxFre(vector<int>& nums, int k) {
+        int n = nums.size();
+        int currsum = 0, freq, maxfreq = INT_MIN;
+        sort(nums.begin(), nums.end());
+        for(int i = 0; i < n; i++){
+            currsum = 0; freq = 1;
+            for(int j = i-1; j >= 0; j--){
+                currsum += (nums[i]-nums[j]);
+                if(currsum <= k) freq++;
+                else break;
+            }
+            maxfreq = max(maxfreq, freq);
+        }
+        return maxfreq;
+}
+
+//optimal: sliding window
+int maxFrequency(vector<int>& nums, int k) {
+        int n = nums.size();
+        int l = 0, maxfreq = 0;
+        long long curr_sum = 0, target_sum = 0;
+        sort(nums.begin(), nums.end());
+
+        for(int r = 0; r  < n; r++){
+            curr_sum += nums[r];
+
+            target_sum = (long long)nums[r] * (r - l + 1);
+            while(target_sum - curr_sum > k){
+                curr_sum -= nums[l];
+                l++;
+                target_sum = (long long)nums[r]*(r - l + 1);
+            }
+            maxfreq = max(maxfreq, r - l + 1);
+        }
+        return maxfreq;
 }

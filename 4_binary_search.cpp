@@ -1,5 +1,7 @@
 #include<iostream>
 #include<vector>
+#include<algorithm>
+#include<numeric>
 using namespace std;
 
 //implement lower bound
@@ -76,6 +78,75 @@ int nthRoot(int n, int m){
         else high = mid - 1;
     }
     return -1;
+}
+
+
+//minm. no. of days for making m bouquets 
+//i/p: array bloomday, m, k -> bloomday[i] => day when ith flower booms
+//k => no. of adjacent flowers for making 1 out of the m bouquets
+//return minm. no. of days to make m bouquets, each bouquet - plucking k flowers adjacent to each other
+//brute force = start day 1 to max(bloomday) -> check no. of bouqets made = no. of k adjacent flower sets
+//when no. of bouquets made that day >= m , return day
+//T.C = O((max(bloomday)-min(bloomday)+1)*n)
+int mindays(vector<int>& bloomDay, int m, int k){
+    int n = bloomDay.size();
+    if(1LL * m * k > n) return -1;
+
+    int lastday = *max_element(bloomDay.begin(), bloomDay.end());
+
+     for(int day = 1; day <= lastday; day++){
+        int cnt = 0, bouqcnt = 0;
+        for(int i = 0; i < n; i++){
+            if(bloomDay[i] <= day){
+                cnt++;
+                if(cnt == k){
+                    bouqcnt++;
+                    cnt = 0; 
+                } 
+            }    else {
+                    cnt = 0;
+                }
+            }
+        if(bouqcnt >= m) return day;   
+    }     
+    return -1;
+}
+
+//optimal solution = binary search
+//same logic but instead of linear traversal of days use mid
+//T.C = O( n * log(max(bloomday)-min(bloomday)+1) )
+bool canMake(vector<int>& bloomDay, int m, int k, int day){
+    int n = bloomDay.size();
+    int cnt = 0, bouqcnt = 0;
+
+    for(int i = 0; i < n; i++){
+        if(bloomDay[i] <= day){
+            cnt++;
+        } else {
+            bouqcnt += (cnt/k);
+            cnt = 0;
+        }
+    }
+    bouqcnt += (cnt/k);
+    return (bouqcnt >= m);
+}
+int mindays(vector<int>& bloomDay, int m, int k){
+    int n = bloomDay.size();
+    if(1LL * m * k > n) return -1;
+
+    int high = *max_element(bloomDay.begin(), bloomDay.end());
+    int low = *min_element(bloomDay.begin(), bloomDay.end());
+
+    while(low <= high){
+        int mid = low + (high-low)/2;
+
+        if(canMake(bloomDay, m, k, mid)){
+            high = mid - 1;
+        }else {
+            low = mid + 1;
+        }
+    }
+    return low;
 }
 
 
@@ -248,3 +319,4 @@ int kthElement(vector<int>& a, vector<int>&b, int k){
             }
         }    
 }
+
