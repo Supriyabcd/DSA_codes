@@ -1,13 +1,16 @@
 #include<iostream>
+#include<string>
+#include<algorithm>
 #include<stack>
 #include<vector>
+#include<cctype> // for isalpha and isdigit
 using namespace std;
 
 class StringStack{
     private:
         vector<string> data;
     public:
-        void push(string& str){
+        void push(const string& str){
             data.push_back(str);
         }
 
@@ -95,7 +98,7 @@ string ExpressionConversion::infixToPrefix(const string &infix){
     vector<char> stack;
     string prefix;
     string reversedInfix = infix;
-    reverse(reversedInfix.begin(),reversedInfix.end());
+    std::reverse(reversedInfix.begin(),reversedInfix.end());
 
     for(char &ch : reversedInfix){
         if(ch == '(') ch = ')';
@@ -103,7 +106,7 @@ string ExpressionConversion::infixToPrefix(const string &infix){
     }
 
     string postfix = infixToPostfix(reversedInfix);
-    reverse(postfix.begin(), postfix.end());
+    std::reverse(postfix.begin(), postfix.end());
     return postfix;
 }
 
@@ -126,16 +129,14 @@ string ExpressionConversion::prefixToPostfix(const string &prefix){
 
 string ExpressionConversion::postfixToPrefix(const string &postfix){
     StringStack stack;
-  
-    for (char ch : postfix)
-    {
-        if (isalpha(ch)||isdigit(ch)){
-           stack.push(string(1,ch)); 
+    for (char ch : postfix) {
+        if (isalpha(ch) || isdigit(ch)) {
+            string s(1, ch);
+            stack.push(s);
         } else {
-            string op1 = stack.top(); stack.pop();
             string op2 = stack.top(); stack.pop();
-            // note the order of op1 and op2 for prefix
-            string expr = ch + op2 + op1;
+            string op1 = stack.top(); stack.pop();
+            string expr = string(1, ch) + op1 + op2;
             stack.push(expr);
         }
     }
@@ -206,7 +207,7 @@ int main()
                 break;
             case 2: cout << "Infix to Prefix : " << Exp.infixToPrefix(expression) << endl;
                 break;
-            case 3: cout << "Postfix to Prefix : "<< Exp.postfixToInfix(expression) << endl;
+            case 3: cout << "Postfix to Prefix : "<< Exp.postfixToPrefix(expression) << endl;
                 break;
             case 4: cout << "Prefix to Postfix : "<< Exp.prefixToPostfix(expression) << endl;
                 break;
