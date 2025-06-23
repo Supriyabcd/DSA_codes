@@ -47,17 +47,14 @@ class ExpressionConversion{
             return 0;
         }
 
-        string infixToPostfix(const string &infix); 
-        //use stack and observe the precedence of operators and parentheses 
-        string infixToPrefix(const string &infix); 
-        //reverse the infix expression, convert it to postfix, and then reverse the result to get prefix
-        string prefixToPostfix(const string &prefix);
-        //traverese backwards, use stack and observe the precedence of operators 
-        //reverse the prefix expression, convert it to postfix, and then reverse the result to get infix
-        string postfixToPrefix(const string &postfix);
-        string prefixToInfix(const string &prefix);
-        //traverse backwards and use stack and observe the precedence of operators 
-        string postfixToInfix(const string &postfix);
+        string infixToPostfix(const string &infix); //use stack and observe the precedence
+        string infixToPrefix(const string &infix); //reverse exp, convert it to postfix, and then reverse 
+        string prefixToPostfix(const string &prefix); //traverse backwards, use stack to get op1 and op2, (op1 + op2 + operator)
+        string postfixToPrefix(const string &postfix); // traverse forwards, use stack to get op1 and op2, (operator + op1 + op2)
+        string postfixToInfix(const string &postfix); //traverse forwards, use stack to get op1 and op2, (op2 + operator + op1)
+        string prefixToInfix(const string &prefix); //traverse backwards, use stack to get op1 and op2, (op1 + operator + op2)
+
+        //for prefix: reversal indeed, but for postfix: no reversal needed
 };
 
 string ExpressionConversion::infixToPostfix(const string &infix){
