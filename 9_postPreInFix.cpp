@@ -54,7 +54,8 @@ class ExpressionConversion{
         string postfixToInfix(const string &postfix); //traverse forwards, use stack to get op1 and op2, (op2 + operator + op1)
         string prefixToInfix(const string &prefix); //traverse backwards, use stack to get op1 and op2, (op1 + operator + op2)
 
-        //for prefix: reversal indeed, but for postfix: no reversal needed
+        //from prefix to in/post & in to pre: reversal needed
+        //from postfix to in/pre & in to post: no reversal needed
 };
 
 string ExpressionConversion::infixToPostfix(const string &infix){
