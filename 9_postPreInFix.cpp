@@ -1,4 +1,6 @@
-#include<bits/stdc++.h>
+#include<iostream>
+#include<stack>
+#include<vector>
 using namespace std;
 
 class StringStack{
@@ -42,11 +44,16 @@ class ExpressionConversion{
             return 0;
         }
 
-        string infixToPostfix(const string &infix);
-        string infixToPrefix(const string &infix);
+        string infixToPostfix(const string &infix); 
+        //use stack and observe the precedence of operators and parentheses 
+        string infixToPrefix(const string &infix); 
+        //reverse the infix expression, convert it to postfix, and then reverse the result to get prefix
         string prefixToPostfix(const string &prefix);
+        //traverese backwards, use stack and observe the precedence of operators 
+        //reverse the prefix expression, convert it to postfix, and then reverse the result to get infix
         string postfixToPrefix(const string &postfix);
         string prefixToInfix(const string &prefix);
+        //traverse backwards and use stack and observe the precedence of operators 
         string postfixToInfix(const string &postfix);
 };
 
@@ -66,7 +73,8 @@ string ExpressionConversion::infixToPostfix(const string &infix){
             }
             stack.pop_back();
         } else {
-            while (!stack.empty() && precedence(stack.back()) >= precedence(ch))
+            while (!stack.empty() && precedence(stack.back()) >= precedence(ch)) 
+            // here "stack is implemented as vector<char>" so back() = top()
             {
                 postfix += stack.back();
                 stack.pop_back();
@@ -101,23 +109,19 @@ string ExpressionConversion::infixToPrefix(const string &infix){
 
 string ExpressionConversion::prefixToPostfix(const string &prefix){
     StringStack stack;
-    /*
-
-    for (auto it = prefix.rbegin(); it != prefix.rend(); ++it){
+    for (auto it = prefix.rbegin(); it != prefix.rend(); ++it){ // traverse backwards
         char ch = *it;
-        if (isalpha(ch || isdigit(ch))){
-            stack.push(string(1,ch));
+        if (isalpha(ch) || isdigit(ch)){
+            string s(1, ch);
+            stack.push(s);
         } else {
-            string op1 = stack.back();
-            stack.pop_back();
-            string op2 = stack.back();
-            stack.pop_back();
+            string op1 = stack.top(); stack.pop();
+            string op2 = stack.top(); stack.pop();
             string expr = op1 + op2 + ch;
-            string push_back;
+            stack.push(expr);
         }
     }
-    return stack.back();
-    */
+    return stack.top();
 }
 
 string ExpressionConversion::postfixToPrefix(const string &postfix){
@@ -126,10 +130,11 @@ string ExpressionConversion::postfixToPrefix(const string &postfix){
     for (char ch : postfix)
     {
         if (isalpha(ch)||isdigit(ch)){
-           //stack.push(std::string(1,ch)); 
+           stack.push(string(1,ch)); 
         } else {
-            string op1 = stack.top();
-            string op2 = stack.top();
+            string op1 = stack.top(); stack.pop();
+            string op2 = stack.top(); stack.pop();
+            // note the order of op1 and op2 for prefix
             string expr = ch + op2 + op1;
             stack.push(expr);
         }
@@ -138,28 +143,34 @@ string ExpressionConversion::postfixToPrefix(const string &postfix){
 }
 
 string ExpressionConversion::postfixToInfix(const string &postfix){
-    
-
-    
+    vector<string> stack;
+    for (char ch : postfix) {
+        if (isalpha(ch) || isdigit(ch)) {
+            stack.push_back(string(1, ch));
+        } else {
+            string op1 = stack.back(); stack.pop_back();
+            string op2 = stack.back(); stack.pop_back();
+            string expr = "(" + op2 + ch + op1 + ")"; // note the order of op2 and op1 for infix
+            stack.push_back(expr);
+        }
+    }
+    return stack.back(); //same as stack.top()    
 }
 
 string ExpressionConversion::prefixToInfix(const string &prefix){
     vector<string> stack;
-    string reversedPrefix = prefix;
-    reverse(reversedPrefix.begin(), reversedPrefix.end());
-    for (char ch : reversedPrefix){
-        if (isalpha(ch) || isdigit(ch)){
-            stack.push_back(string(1,ch));
+    for (auto it = prefix.rbegin(); it != prefix.rend(); ++it) { //traverse backwards
+        char ch = *it;
+        if (isalpha(ch) || isdigit(ch)) {
+            stack.push_back(string(1, ch));
         } else {
-            string op1 = stack.back();
-            string pop_back();
-            string op2 = stack.back();
-            string pop_back();
+            string op1 = stack.back(); stack.pop_back();
+            string op2 = stack.back(); stack.pop_back();
             string expr = "(" + op1 + ch + op2 + ")";
             stack.push_back(expr);
         }
     }
-    return stack.back();
+    return stack.back(); //same as stack.top()
 }
 
 int main()
