@@ -1,5 +1,15 @@
 #include <bits/stdc++.h>
 using namespace std;
+
+//same logic as insertion sort but using recursion
+//but outer i loop gone
+//main() calls recursive_insertion_sort with i = 1, next calls itself with i+1 until i becomes n
+//The function takes an array and its size as input and sorts the array in place.
+
+//Time complexity: O(n^2)
+//Space complexity: O(n) due to recursion stack
+//Stable sort: Yes
+
 void recursive_insertion_sort(int a[], int n, int i){
      
     if (i>= n) return;

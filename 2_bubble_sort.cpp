@@ -3,6 +3,19 @@
 #include<algorithm>
 using namespace std;
 
+//simplest of all sorting algorithms
+//not efficient for large data sets
+//T.C = O(n^2), S.C = O(1)
+
+//stable sort - does not change the relative order of elements with equal keys
+//in-place sort - sorts the array without requiring additional space for another array
+//bubble sort - repeatedly swap adjacent elements if they are in wrong order
+//best case - O(n) when array is already sorted
+//worst case - O(n^2) when array is reverse sorted
+
+//after each ith pass, the ith largest element bubbles up to its correct position
+//the number of passes is n-1, where n is the number of elements
+
 void swap(int *a, int *b){
     int temp;
     temp = *a;

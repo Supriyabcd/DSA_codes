@@ -1,12 +1,20 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+//Divide and conquer algorithm 
+//sorts an array by dividing it into halves, sorting each half, and then merging the sorted halves.
+
+// Time Complexity: O(n log n)
+// Space Complexity: O(n) for the temporary array used in merging
+// Stable Sort: Yes, it maintains the relative order of equal elements.
+// In-Place Sort: No, it requires additional space for the temporary array.
+
 void merge(vector<int> &arr, int low, int mid, int high) {
     vector<int> temp; // temporary array
     int left = low;      // starting index of left half of arr
     int right = mid + 1;   // starting index of right half of arr
 
-    //storing elements in the temporary array in a sorted manner//
+    //storing elements in the temporary array in a sorted manner //
 
     while (left <= mid && right <= high) {
         if (arr[left] <= arr[right]) {
@@ -20,7 +28,6 @@ void merge(vector<int> &arr, int low, int mid, int high) {
     }
 
     // if elements on the left half are still left //
-
     while (left <= mid) {
         temp.push_back(arr[left]);
         left++;

@@ -48,9 +48,9 @@ class ExpressionConversion{
         }
 
         string infixToPostfix(const string &infix); //use stack and observe the precedence
-        string infixToPrefix(const string &infix); //reverse exp, convert it to postfix, and then reverse 
+        string infixToPrefix(const string &infix); //reverse exp, convert it to postfix, and then reverse result
         string prefixToPostfix(const string &prefix); //traverse backwards, use stack to get op1 and op2, (op1 + op2 + operator)
-        string postfixToPrefix(const string &postfix); // traverse forwards, use stack to get op1 and op2, (operator + op1 + op2)
+        string postfixToPrefix(const string &postfix); // traverse forwards, use stack to get op1 and op2, (operator + op2 + op1)
         string postfixToInfix(const string &postfix); //traverse forwards, use stack to get op1 and op2, (op2 + operator + op1)
         string prefixToInfix(const string &prefix); //traverse backwards, use stack to get op1 and op2, (op1 + operator + op2)
 
@@ -132,9 +132,10 @@ string ExpressionConversion::postfixToPrefix(const string &postfix){
             string s(1, ch);
             stack.push(s);
         } else {
-            string op2 = stack.top(); stack.pop();
             string op1 = stack.top(); stack.pop();
-            string expr = string(1, ch) + op1 + op2;
+            string op2 = stack.top(); stack.pop();
+            string expr = string(1, ch) + op2 + op1;
+            // note the order of op2 and op1 for prefix
             stack.push(expr);
         }
     }
