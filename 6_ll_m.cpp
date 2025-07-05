@@ -1,4 +1,6 @@
-#include<bits/stdc++.h>
+#include<iostream>
+#include<unordered_map>
+#include<unordered_set>
 using namespace std;
 
 struct ListNode {
@@ -103,7 +105,54 @@ ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
             list2 = list2->next;
         }
         return head->next;
+}
+
+//add 1 to no. represented by ll
+//brute force: convert ll to actual no. -> add 1 to it and convert it back to ll
+//better soln: reverse list, add one to first node, and keep calculating carry as you  proceed
+//TC: O(3N), SC: O(1)
+
+ListNode* addOne(ListNode* head){
+    head = reverseLinkedList(head);
+    ListNode* curr = head;
+
+    int carry = 1;
+    while(curr){
+        int sum = curr->val + carry;
+        curr->val = (sum) % 10;
+        carry = sum/10;
+        if (!curr->next && carry) {
+            curr->next = new ListNode(carry);
+            carry = 0;
+        }
+        curr = curr->next;
     }
+    return reverseLinkedList(head);
+}
+
+//optimal soln: recursion+backtracking
+int addOne_util(ListNode* node) {
+    if(node == NULL) return 1;
+        
+        int carry = addOne_util(node->next);
+        node->val = node->val + carry;
+        if(node->val < 10){
+            return 0;
+        }
+        node->val = 0;
+        return 1;
+}
+
+ListNode* addOne(ListNode* head) {
+        int carry = addOne_util(head);
+        
+        if(carry == 1){
+            ListNode* newHead = new ListNode(carry);
+            newHead->next = head;
+            head = newHead;
+        }
+        return head;
+}
 
 //add 2 nos. in ll (of size m and n resp.)
 //soln - ele. maths
@@ -132,6 +181,111 @@ ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
         }
         return head -> next; 
     }
+
+//group odd indexed nodes in the start, and the even indexed after those 
+//eg: Input: head = [2,1,3,5,6,4,7]
+//Output: [2,3,6,7,1,5,4]
+
+//brute force: using array to store elements in order needed and put back into the ll
+//TC: O(2N), SC: O(N)-> need to optimize space complexxity
+ListNode* segOddEven(ListNode* head){
+    vector<int> v;
+
+    //add odd indexed to vector
+    ListNode* temp = head;
+    while(temp && temp->next){
+        v.push_back(temp->val);
+        temp = temp->next->next;
+    }
+    if(temp) 
+        v.push_back(temp->val);
+
+    //add even indexed to vector
+    temp = head->next;
+    while(temp && temp->next){
+        v.push_back(temp->val);
+        temp = temp->next->next;
+    }
+    if(temp) 
+        v.push_back(temp->val);
+
+    //put in ll according to v
+    int i = 0;
+    temp = head;
+    while(temp){
+        temp->val = v[i];
+        temp = temp->next;
+        i++;
+    }
+
+    return head;
+}
+
+//optimal solution: connect odds together, evens together, join odd grp end to even grp start
+//TC: O(N)   SC:O(1)
+ListNode* segregateOddEven(ListNode* head){
+    if(!head || !head->next) return head;
+
+    ListNode* evenHead = head->next;
+
+    //segregation: connect odd indexed nodes together and even indexed together separately
+    ListNode* odd = head;
+    ListNode* even = head->next;
+    while(even && even->next){ //odd is always behind even, if even hasn't reached , odd also won't)
+        odd->next = odd->next->next;
+        even->next = even->next->next;
+
+        odd = odd->next;
+        even = even->next;
+    }
+    odd->next = evenHead;
+
+    return head;
+}
+
+//sort 0's, 1's, 2's by channging links
+//brute force = using extra space like vector etc
+//TC:O(2N), SC: O(N)
+
+//better soln: freq of 0, 1, 2; update ll accordingly
+//TC: O(2N), SC: O(1)
+
+//optimal: segregation like in oddeven segregation but here three groups of nodes
+//TC: O(N), SC : O(1)
+ListNode* segregate(ListNode* head){
+    if(!head || !head->next) return head;
+
+    ListNode* head0 = new ListNode(-1);
+    ListNode* head1 = new ListNode(-1);
+    ListNode* head2 = new ListNode(-1);
+
+    //segregation
+    ListNode* temp0 = head0;
+    ListNode* temp1 = head1;
+    ListNode* temp2 = head2;
+
+    ListNode* temp = head;
+    while(temp && temp->next){
+        if(temp->val == 0){
+            temp0->next = temp;
+            temp0 = temp;
+        } else if(temp->val == 1){
+            temp1->next = temp;
+            temp1 = temp;
+        } else {
+            temp2->next = temp;
+            temp2 = temp;
+        }
+        temp = temp->next;
+    }
+    temp0->next = (head1->next) ? head1->next : head2->next;
+    temp1->next = head2->next;
+    temp2->next = NULL;
+    head = head0->next;
+
+    delete head0, head1, head2;
+    return head;
+}
 
 //remove kth node from end
 //brute force - delete (L-N+1)th node from head

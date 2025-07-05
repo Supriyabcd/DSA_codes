@@ -1,4 +1,3 @@
-//Driver Code Starts
 #include <iostream>
 #include<vector>
 #include<queue>
@@ -8,6 +7,7 @@ using namespace std;
 class Solution {
   public:
     // Function to return Breadth First Traversal of given graph.
+    //adj here => adjacency list
     vector<int> bfsOfGraph(vector<vector<int>> &adj) {
         int V = adj.size();
         vector<int> bfs;
