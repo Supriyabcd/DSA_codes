@@ -28,7 +28,7 @@ public:
     }
 
     ~Student(){
-        cout << "All deleted from object" << endl;
+        cout << "Everything deleted from object" << endl;
         delete cgpaPtr;
         //name deleted just when this fucntion is called by compiler w/o even writing this
         //but for dyn. allocated cgpaPtr need to delete it

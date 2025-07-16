@@ -206,4 +206,72 @@ public:
     int diameterOfBT(TreeNode* root){
         
     }
+
+//validate if given binary tree is BST or not
+//BFS implementation
+    bool isValidBST(TreeNode* root) {
+        if(!root || (!root->right && !root->left))
+            return true;
+
+        queue<tuple<TreeNode*, long, long>> q;
+        q.push({root, LONG_MIN, LONG_MAX});
+
+        while(!q.empty()){
+            auto [node, minVal, maxVal] = q.front(); 
+            q.pop();
+
+            if(node->val >= maxVal || node->val <= minVal){
+                    return false;
+            } 
+            if(node->left) 
+                q.push({node->left, minVal, node->val});
+            if(node->right) 
+                q.push({node->right, node->val, maxVal});
+        }
+        return true;
+    }
+
+//recursive implementation
+    bool valid(TreeNode* node, long minimum, long maximum) {
+        if (!node) return true;
+
+        if (!(node->val > minimum && node->val < maximum)) return false;
+
+        return valid(node->left, minimum, node->val) && valid(node->right, node->val, maximum);
+    } 
+    bool isValidBST(TreeNode* root) {
+        return valid(root, LONG_MIN, LONG_MAX);        
+    }
+
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if(!root || root == p || root == q) return root;
+
+        TreeNode* left = lowestCommonAncestor(root->left, p, q);
+        TreeNode* right = lowestCommonAncestor(root->right, p, q);
+
+        if(left && right) return root;
+        return left ? left : right;
+    }
+
+    //find kth smallest element in bst
+    //brute force: use array to store elements by inorder traversal and return arr[k-1]
+    //optimal solution:
+    void inorder(TreeNode* node, int k, int& cnt, int& kSmallest){
+        if(!node || cnt >= k) return;
+
+        inorder(node->left, k, cnt, kSmallest);
+        cnt++;
+        if(cnt == k){
+            kSmallest = node->val;
+            return;
+        }
+        inorder(node->right, k, cnt, kSmallest);
+    }
+    int kthSmallest(TreeNode* root, int k) {
+        int cnt = 0, kSmallest = INT_MIN;
+        inorder(root, k, cnt, kSmallest);
+        return kSmallest;
+    }
+
+    //
 };

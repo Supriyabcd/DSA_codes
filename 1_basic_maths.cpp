@@ -1,6 +1,4 @@
-#include<iostream>
-#include<vector>
-#include<algorithm>
+#include<bits/stdc++.h>
 using namespace std;
 
 //Counting digits
@@ -17,7 +15,7 @@ int countDigits(int n){
 
 //optimal - O(1)
 int count_digits(int n){
-    int cnt = (int)(log10(n)+1);
+    int cnt = (int)(std::log10(n)+1);
     return cnt;
 }
 
@@ -83,7 +81,7 @@ bool armstrong (int n){
     int sum = 0;
     while (n > 0){
         int d = n % 10;
-        sum = sum + (int)(pow((double)d, (double)cnt_digits));
+        sum = sum + (int)(std::pow((double)d, (double)cnt_digits));
         n = n/10;
     }
 
@@ -168,7 +166,7 @@ vector<int> divisors(int n){
 //optimal
 vector<int> divisors_(int n){
     vector <int> d;
-    for (int  i = 1; i <= sqrt(n); i++){
+    for (int  i = 1; i <= std::sqrt(n); i++){
         if (n%i == 0){
             d.push_back(i);
 

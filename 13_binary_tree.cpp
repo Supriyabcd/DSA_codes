@@ -84,6 +84,19 @@ public:
     //pre, in, post, level order all at once
 
     int heightoftree(TreeNode* root){
-        
+        if(!root) return 0;
+
+        int rh = maxDepth(root->right);
+        int lh = maxDepth(root->left);
+
+        return 1 + max(lh, rh);
     }
+
+    //invert/flip binary tree
+    TreeNode* flipBT(TreeNode* head){
+
+    }
+
+    //check if two binary trees are indentical or not
+    
 };
