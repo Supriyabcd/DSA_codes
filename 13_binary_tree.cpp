@@ -86,17 +86,48 @@ public:
     int heightoftree(TreeNode* root){
         if(!root) return 0;
 
-        int rh = maxDepth(root->right);
-        int lh = maxDepth(root->left);
+        int rh = heightoftree(root->right);
+        int lh = heightoftree(root->left);
 
         return 1 + max(lh, rh);
     }
-
+    //diameter of binary tree
+    //check if tree is height-balanced or not 
+    
     //invert/flip binary tree
     TreeNode* flipBT(TreeNode* head){
 
     }
 
-    //check if two binary trees are indentical or not
+    //check if two binary trees are identical or not
+
+
+    //least common ancestor - LCA of two given nodes n1, n2
+    //brute force - storing the path from root to the nodes and comapring the node nearest to the node matching in both paths
+    //TC = O(n) , SC = O(n)
+    //optimal - 
+    /*traverse the tree starting from the root. If any of the given keys (n1 and n2) matches with the root, 
+    then the root is LCA (assuming that both keys are present). If the root doesn't match with any of the keys, 
+    we recur for the left and right subtree. The node which has one key present in its left subtree and the other key present in the right subtree is the LCA, 
+    else if, both keys lie in the left subtree, then the left subtree has LCA, else the LCA lies in the right subtree.
+    */ 
+    //TC = O(n), SC = O(h)
+    TreeNode* lca(TreeNode* root, int n1, int n2){
+    if (!root)
+        return nullptr;
+
+    if (root->val == n1 || root->val == n2)
+        return root;
+
+    TreeNode* leftLca = lca(root->left, n1, n2);
+    TreeNode* rightLca = lca(root->right, n1, n2);
+
+    if (leftLca && rightLca)
+        return root;
+
+    return leftLca ? leftLca : rightLca;
+
+    }
+
     
 };

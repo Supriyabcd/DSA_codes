@@ -273,5 +273,37 @@ public:
         return kSmallest;
     }
 
-    //
+    //LCA 
+    //1. normal binary tree LCA - TC = O(n), SC = O(h)
+    //2. recusrive approach using bst props - TC and SC = O(h)
+    TreeNode* LCA(TreeNode* root, TreeNode* n1, TreeNode* n2) {
+  	
+    if (root == nullptr)
+        return nullptr;
+
+    if (root->val > n1->val && root->val > n2->val)
+        return LCA(root->left, n1, n2);
+
+    if (root->val < n1->val &&  root->val < n2->val)
+        return LCA(root->right, n1, n2);
+
+    return root;
+    }
+    
+    //3. iterative approach using bst props - TC and SC = O(h)
+    TreeNode* LCA2(TreeNode* root, TreeNode* n1, TreeNode* n2){
+        while (root != nullptr) {
+      
+        if (root->val > n1->val && root->val > n2->val)
+            root = root->left;
+
+        else if (root->val < n1->val && root->val < n2->val)
+            root = root->right;
+        else
+            break;
+        }
+        return root;
+    }
+
+
 };
