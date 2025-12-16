@@ -1,4 +1,5 @@
 #include<iostream>
+#include<vector>
 #include<unordered_map>
 #include<unordered_set>
 using namespace std;
@@ -390,7 +391,7 @@ bool detectCycle(ListNode* head){
 //starting point of loop in ll
 //brute force - store eles in hashmap
 //optimal soln - fast & slow pointer
-ListNode *firstCycleNode(ListNode *head) {
+ListNode* CycleStartNode(ListNode *head) {
         ListNode *slow = head;
         ListNode *fast = head;
 

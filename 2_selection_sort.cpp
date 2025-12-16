@@ -30,7 +30,7 @@ void selectionSort(int n, int *a)
    }  
    
    printf("The elements of array after sorting: ");
-   for(int i=0;i<n;i++){
+   for(int i = 0; i < n ; i++){
    printf("%d ",a[i]);
    }
    printf("\n The number of swaps : %d",swapCount);
