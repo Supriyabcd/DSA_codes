@@ -5,6 +5,49 @@
 #include<algorithm>
 using namespace std;
 
+//Remove outermost parentheses
+//approach 1
+class Solution {
+public:
+    string removeOuterParentheses(string s) {
+        int cnt = 0;
+        string res = "";
+
+        for(char c : s){
+            if(c == '(' && cnt++ > 0)
+                res += c;
+            else if(c == ')' && cnt-- > 1)
+                res += c;
+        }
+
+        return res;
+    }
+};
+
+//approach 2
+class Solution {
+public:
+    string removeOuterParentheses(string s) {
+        int open_cnt = 0, close_cnt = 0;
+        int start = 0;
+        string res = "";
+
+        for(int i = 0; i < s.size(); i++){
+            if(s[i] == '(') 
+                open_cnt++;
+            else if(s[i] == ')')
+                close_cnt++;
+
+            if(open_cnt == close_cnt){
+                res += s.substr(start + 1, i - start - 1);
+                start = i + 1;
+            }
+        }
+
+        return res;
+    }
+};
+
 //Palindrome check
 //optimized solution
 string result(string s)
